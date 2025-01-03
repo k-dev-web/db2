@@ -1,5 +1,5 @@
 'use client'
-import React, {Suspense, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 
 import {Stack, styled} from "@mui/system";
 import {Box, Button, Paper, Table, TableCell, TableContainer, TableRow} from "@mui/material";
@@ -8,6 +8,7 @@ import Loader from "@/components/Loader/loader";
 
 const Item = styled(Paper)(({theme}) => ({
     backgroundColor: '#fff',
+    // @ts-ignore
     ...theme.typography.body2,
     padding: theme.spacing(0),
     textAlign: 'center',
@@ -17,12 +18,18 @@ const Item = styled(Paper)(({theme}) => ({
     }),
 }));
 
+export type gridItem={
+    index1:number,
+    index2:number,
+    status:string
+}
+
 const Test: React.FC = () => {
-    const [start, setStart] = useState([]);
-    const [end, setEnd] = useState([]);
+    const [start, setStart] = useState<number[]>([]);
+    const [end, setEnd] = useState<number[]>([]);
     const [selection, setSelection] = useState('none')
-    const [arr, setArr] = useState([]);
-    const [modifyArr, setModifyArr] = useState([])
+    const [arr, setArr] = useState<gridItem[][]>([]);
+    const [modifyArr, setModifyArr] = useState<gridItem[][]>([])
     const {createMap, searchPath1, searchPath2} = useHandlers();
     const [isMounted,setMounted]=useState(false);
     const [timeSearchPath,setTimeSearchPath]=useState<null|string>(null);
@@ -41,8 +48,8 @@ const Test: React.FC = () => {
                     // searchPath2(arr, start.toString(), end.toString())
                 ]
             ).then(res => {
-                const newPath=res[0].map(a => a.split(',').map(Number));
-                newPath.forEach(a => {
+                const newPath=res[0].map((a:string) => a.split(',').map(Number));
+                newPath.forEach((a:number[]) => {
                     tmpArr[a[0]][a[1]].status = 'way'
                 });
                 setPath(newPath);

@@ -1,4 +1,5 @@
-import {useCallback, useMemo} from "react";
+import {useCallback} from "react";
+import {gridItem} from "@/app/test/page";
 
 const directions = [
     [-1, 0], [1, 0], [0, -1], [0, 1],
@@ -20,19 +21,19 @@ export function useHandlers(): any {
         }
         return tmpArr1
     }, [])
-    const searchPath1 = useCallback(async (grid, start, end) => {
+    const searchPath1 = useCallback(async (grid:gridItem[][], start:string, end:string) => {
         const openPath = new Set(),
-            path = {},
-            pathScore = {},
-            fullPathScore = {};
+            path:{[key:string]:any} = {},
+            pathScore:{[key:string]:any} = {},
+            fullPathScore:{[key:string]:any} = {};
 
         openPath.add(start.toString());
         pathScore[start] = 0;
         fullPathScore[start] = heuristic(start, end);
 
         while (openPath.size > 0) {
-            let current = Array.from(openPath).reduce((lowest, cell) => {
-                return (fullPathScore[cell] < fullPathScore[lowest] ? cell : lowest);
+            let current = Array.from(openPath).reduce((lowest:string, cell:string) => {
+                return fullPathScore[cell] < fullPathScore[lowest] ? cell : lowest;
             });
 
             if (current === end.toString()) {
